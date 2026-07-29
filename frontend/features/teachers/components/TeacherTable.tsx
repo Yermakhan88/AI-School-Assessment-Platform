@@ -32,8 +32,24 @@ export default function TeacherTable() {
             >
 
               <td className="p-4">
-                {teacher.fullName}
-              </td>
+
+    <div className="flex items-center gap-3">
+
+        <div className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold">
+
+            {teacher.avatar}
+
+        </div>
+
+        <span>
+
+            {teacher.fullName}
+
+        </span>
+
+    </div>
+
+</td>
 
               <td className="p-4">
                 {teacher.email}
@@ -44,7 +60,15 @@ export default function TeacherTable() {
               </td>
 
               <td className="p-4">
-                {teacher.status}
+                <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                        teacher.status === "Active"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
+                    }`}
+                >
+                    {teacher.status}
+                </span>
               </td>
 
             </tr>

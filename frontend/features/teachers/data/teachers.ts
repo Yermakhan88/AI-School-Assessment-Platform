@@ -1,12 +1,13 @@
 import { Teacher } from "../types/teacher";
 
-export const teachers: Teacher[] = [
+export const teachers = [
   {
     id: 1,
     fullName: "Ermakhan Zhabaev",
     email: "ermakhan@mail.com",
     subject: "Informatics",
     status: "Active",
+    avatar: "EZ",
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export const teachers: Teacher[] = [
     email: "aigerim@mail.com",
     subject: "Physics",
     status: "Active",
+    avatar: "AN",
   },
   {
     id: 3,
@@ -21,5 +23,6 @@ export const teachers: Teacher[] = [
     email: "dias@mail.com",
     subject: "Mathematics",
     status: "Inactive",
+    avatar: "DT",
   },
 ];

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   LayoutDashboard,
   GraduationCap,
@@ -13,38 +14,47 @@ import {
 const menuItems = [
   {
     title: "Dashboard",
+    href: "/dashboard",
     icon: LayoutDashboard,
   },
   {
     title: "Teachers",
+    href: "/teachers",
     icon: GraduationCap,
   },
   {
     title: "Students",
+    href: "/students",
     icon: Users,
   },
   {
     title: "Subjects",
+    href: "/subjects",
     icon: BookOpen,
   },
   {
     title: "Assignments",
+    href: "/assignments",
     icon: ClipboardList,
   },
   {
     title: "AI Assessment",
+    href: "/ai",
     icon: Bot,
   },
   {
     title: "Analytics",
+    href: "/analytics",
     icon: BarChart3,
   },
   {
     title: "Reports",
+    href: "/reports",
     icon: FileText,
   },
   {
     title: "Settings",
+    href: "/settings",
     icon: Settings,
   },
 ];
@@ -69,14 +79,15 @@ export default function Sidebar() {
           const Icon = item.icon;
 
           return (
-            <button
+            <Link
               key={item.title}
+              href={item.href}
               className="w-full flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-slate-800 transition"
             >
               <Icon size={20} />
 
               <span>{item.title}</span>
-            </button>
+            </Link>
           );
         })}
 
