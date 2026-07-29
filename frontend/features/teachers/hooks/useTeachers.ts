@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
 import {
   Teacher,
   teacherService,
@@ -20,27 +22,49 @@ export function useTeachers() {
       setTeachers(data);
     } catch (error) {
       console.error(error);
+      toast.error("Failed to load teachers");
     } finally {
       setLoading(false);
     }
   };
 
   const createTeacher = async (teacher: CreateTeacherDto) => {
-    await teacherService.create(teacher);
-    await loadTeachers();
+    try {
+      await teacherService.create(teacher);
+      await loadTeachers();
+
+      toast.success("Teacher created successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to create teacher");
+    }
   };
 
   const updateTeacher = async (
     id: number,
     teacher: UpdateTeacherDto
   ) => {
-    await teacherService.update(id, teacher);
-    await loadTeachers();
+    try {
+      await teacherService.update(id, teacher);
+      await loadTeachers();
+
+      toast.success("Teacher updated successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to update teacher");
+    }
   };
 
   const deleteTeacher = async (id: number) => {
-    await teacherService.delete(id);
-    await loadTeachers();
+    try {
+      await teacherService.delete(id);
+      await loadTeachers();
+
+      toast.success("Teacher deleted successfully");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to delete teacher");
+    }
   };
 
   useEffect(() => {

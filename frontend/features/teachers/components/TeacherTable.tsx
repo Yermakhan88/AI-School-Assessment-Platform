@@ -1,6 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import TeacherDialog from "./TeacherDialog";
 
@@ -37,8 +48,16 @@ export default function TeacherTable({
     );
   }
 
+  if (teachers.length === 0) {
+    return (
+      <div className="rounded-xl border bg-white p-10 text-center text-slate-500">
+        No teachers found
+      </div>
+    );
+  }
+
   return (
-    <div className="rounded-xl border bg-white shadow-sm overflow-hidden">
+    <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
       <table className="w-full">
         <thead className="bg-slate-100">
           <tr>
@@ -86,14 +105,13 @@ export default function TeacherTable({
                       : "bg-red-100 text-red-700"
                   }`}
                 >
-                  {teacher.is_active
-                    ? "Active"
-                    : "Inactive"}
+                  {teacher.is_active ? "Active" : "Inactive"}
                 </span>
               </td>
 
               <td className="p-4">
                 <div className="flex justify-center gap-2">
+
                   <TeacherDialog
                     mode="edit"
                     teacher={teacher}
@@ -108,15 +126,49 @@ export default function TeacherTable({
                     }
                   />
 
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() =>
-                      onTeacherDeleted(teacher.id)
-                    }
-                  >
-                    🗑️
-                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                      >
+                        🗑️
+                      </Button>
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Delete Teacher
+                        </AlertDialogTitle>
+
+                        <AlertDialogDescription>
+                          Are you sure you want to delete{" "}
+                          <strong>{teacher.full_name}</strong>?
+
+                          <br />
+                          <br />
+
+                          This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>
+                          Cancel
+                        </AlertDialogCancel>
+
+                        <AlertDialogAction
+                          onClick={() =>
+                            onTeacherDeleted(teacher.id)
+                          }
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+
                 </div>
               </td>
             </tr>

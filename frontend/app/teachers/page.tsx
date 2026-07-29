@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import DashboardLayout from "@/components/layout/DashboardLayout";
 
 import TeacherToolbar from "@/features/teachers/components/TeacherToolbar";
@@ -16,6 +18,24 @@ export default function TeachersPage() {
     deleteTeacher,
   } = useTeachers();
 
+  const [search, setSearch] = useState("");
+
+  const filteredTeachers = useMemo(() => {
+    const value = search.trim().toLowerCase();
+
+    if (!value) {
+      return teachers;
+    }
+
+    return teachers.filter((teacher) => {
+      return (
+        teacher.full_name.toLowerCase().includes(value) ||
+        teacher.email.toLowerCase().includes(value) ||
+        teacher.subject.toLowerCase().includes(value)
+      );
+    });
+  }, [teachers, search]);
+
   return (
     <DashboardLayout>
       <div className="space-y-6">
@@ -24,11 +44,13 @@ export default function TeachersPage() {
         </h1>
 
         <TeacherToolbar
+          search={search}
+          onSearchChange={setSearch}
           onTeacherCreated={createTeacher}
         />
 
         <TeacherTable
-          teachers={teachers}
+          teachers={filteredTeachers}
           loading={loading}
           onTeacherUpdated={updateTeacher}
           onTeacherDeleted={deleteTeacher}
