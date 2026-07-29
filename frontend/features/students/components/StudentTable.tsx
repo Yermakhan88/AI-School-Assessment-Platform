@@ -1,5 +1,6 @@
 "use client";
-
+import LoadingState from "@/components/common/LoadingState";
+import EmptyState from "@/components/common/EmptyState";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -41,20 +42,20 @@ export default function StudentTable({
   onStudentDeleted,
 }: StudentTableProps) {
   if (loading) {
-    return (
-      <div className="rounded-xl border bg-white p-6">
-        Loading students...
-      </div>
-    );
-  }
+  return (
+    <LoadingState
+      message="Loading students..."
+    />
+  );
+}
 
-  if (students.length === 0) {
-    return (
-      <div className="rounded-xl border bg-white p-10 text-center text-slate-500">
-        No students found
-      </div>
-    );
-  }
+if (students.length === 0) {
+  return (
+    <EmptyState
+      title="No students found"
+    />
+  );
+}
 
   return (
     <div className="overflow-hidden rounded-xl border bg-white shadow-sm">

@@ -2,10 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.teacher_router import router as teacher_router
+from app.api.student_router import router as student_router
+
 from app.database.database import Base, engine
 
 # Импорт моделей
 from app.models.teacher import Teacher  # noqa: F401
+from app.models.student import Student  # noqa: F401
 
 # Создание таблиц
 Base.metadata.create_all(bind=engine)
@@ -38,6 +41,7 @@ app.add_middleware(
 # ==========================
 
 app.include_router(teacher_router)
+app.include_router(student_router)
 
 # ==========================
 # Endpoints
