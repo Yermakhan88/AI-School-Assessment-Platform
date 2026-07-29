@@ -1,4 +1,4 @@
-import { teachers } from "../data/teachers";
+import { teacherService } from "@/services/teacher.service";
 
 export default function TeacherTable() {
   return (
@@ -24,7 +24,7 @@ export default function TeacherTable() {
 
         <tbody>
 
-          {teachers.map((teacher) => (
+          {teacherService.getAll().map((teacher) => (
 
             <tr
               key={teacher.id}
