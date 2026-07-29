@@ -15,6 +15,13 @@ export interface CreateTeacherDto {
   is_active: boolean;
 }
 
+export interface UpdateTeacherDto {
+  full_name: string;
+  email: string;
+  subject: string;
+  is_active: boolean;
+}
+
 export const teacherService = {
   async getAll(): Promise<Teacher[]> {
     const response = await fetch(API_URL);
@@ -47,6 +54,25 @@ export const teacherService = {
 
     if (!response.ok) {
       throw new Error("Failed to create teacher");
+    }
+
+    return response.json();
+  },
+
+  async update(
+    id: number,
+    data: UpdateTeacherDto
+  ): Promise<Teacher> {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update teacher");
     }
 
     return response.json();

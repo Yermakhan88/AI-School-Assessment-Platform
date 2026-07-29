@@ -12,6 +12,8 @@ export default function TeachersPage() {
     teachers,
     loading,
     createTeacher,
+    updateTeacher,
+    deleteTeacher,
   } = useTeachers();
 
   return (
@@ -28,6 +30,8 @@ export default function TeachersPage() {
         <TeacherTable
           teachers={teachers}
           loading={loading}
+          onTeacherUpdated={updateTeacher}
+          onTeacherDeleted={deleteTeacher}
         />
       </div>
     </DashboardLayout>

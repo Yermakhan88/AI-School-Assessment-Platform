@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Dialog,
@@ -14,19 +14,58 @@ import { Button } from "@/components/ui/button";
 
 import TeacherForm from "./TeacherForm";
 
-import { CreateTeacherDto } from "@/services/teacher.service";
+import {
+  CreateTeacherDto,
+  Teacher,
+  UpdateTeacherDto,
+} from "@/services/teacher.service";
 
 interface Props {
-  onTeacherCreated: (teacher: CreateTeacherDto) => Promise<void>;
+  mode?: "create" | "edit";
+
+  teacher?: Teacher;
+
+  trigger?: React.ReactNode;
+
+  onTeacherCreated?: (
+    teacher: CreateTeacherDto
+  ) => Promise<void>;
+
+  onTeacherUpdated?: (
+    id: number,
+    teacher: UpdateTeacherDto
+  ) => Promise<void>;
 }
 
 export default function TeacherDialog({
+  mode = "create",
+  teacher,
+  trigger,
   onTeacherCreated,
+  onTeacherUpdated,
 }: Props) {
   const [open, setOpen] = useState(false);
 
-  const handleSuccess = async (teacher: CreateTeacherDto) => {
-    await onTeacherCreated(teacher);
+  useEffect(() => {
+    if (!open) return;
+  }, [open]);
+
+  const handleSubmit = async (
+    data: CreateTeacherDto | UpdateTeacherDto
+  ) => {
+    if (mode === "create") {
+      if (!onTeacherCreated) return;
+
+      await onTeacherCreated(data as CreateTeacherDto);
+    } else {
+      if (!teacher || !onTeacherUpdated) return;
+
+      await onTeacherUpdated(
+        teacher.id,
+        data as UpdateTeacherDto
+      );
+    }
+
     setOpen(false);
   };
 
@@ -36,20 +75,25 @@ export default function TeacherDialog({
       onOpenChange={setOpen}
     >
       <DialogTrigger asChild>
-        <Button>
-          + Add Teacher
-        </Button>
+        {trigger ?? (
+          <Button>
+            + Add Teacher
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
-            Add Teacher
+            {mode === "create"
+              ? "Add Teacher"
+              : "Edit Teacher"}
           </DialogTitle>
         </DialogHeader>
 
         <TeacherForm
-          onSubmit={handleSuccess}
+          teacher={teacher}
+          onSubmit={handleSubmit}
         />
       </DialogContent>
     </Dialog>

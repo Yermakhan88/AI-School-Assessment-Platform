@@ -1,17 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { CreateTeacherDto } from "@/services/teacher.service";
+import {
+  CreateTeacherDto,
+  Teacher,
+  UpdateTeacherDto,
+} from "@/services/teacher.service";
 
 interface Props {
-  onSubmit: (teacher: CreateTeacherDto) => Promise<void>;
+  teacher?: Teacher;
+  onSubmit: (
+    teacher: CreateTeacherDto | UpdateTeacherDto
+  ) => Promise<void>;
 }
 
 export default function TeacherForm({
+  teacher,
   onSubmit,
 }: Props) {
   const [fullName, setFullName] = useState("");
@@ -20,8 +28,19 @@ export default function TeacherForm({
   const [isActive, setIsActive] = useState(true);
   const [saving, setSaving] = useState(false);
 
+  useEffect(() => {
+    if (!teacher) {
+      return;
+    }
+
+    setFullName(teacher.full_name);
+    setEmail(teacher.email);
+    setSubject(teacher.subject);
+    setIsActive(teacher.is_active);
+  }, [teacher]);
+
   const handleSubmit = async (
-    e: React.FormEvent<HTMLFormElement>,
+    e: React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
 
@@ -35,10 +54,12 @@ export default function TeacherForm({
         is_active: isActive,
       });
 
-      setFullName("");
-      setEmail("");
-      setSubject("");
-      setIsActive(true);
+      if (!teacher) {
+        setFullName("");
+        setEmail("");
+        setSubject("");
+        setIsActive(true);
+      }
     } finally {
       setSaving(false);
     }
@@ -111,7 +132,11 @@ export default function TeacherForm({
         className="w-full"
         disabled={saving}
       >
-        {saving ? "Saving..." : "Save Teacher"}
+        {saving
+          ? "Saving..."
+          : teacher
+            ? "Update Teacher"
+            : "Save Teacher"}
       </Button>
     </form>
   );

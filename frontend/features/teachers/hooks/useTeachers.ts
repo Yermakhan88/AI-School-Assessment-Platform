@@ -5,6 +5,7 @@ import {
   Teacher,
   teacherService,
   CreateTeacherDto,
+  UpdateTeacherDto,
 } from "@/services/teacher.service";
 
 export function useTeachers() {
@@ -13,6 +14,8 @@ export function useTeachers() {
 
   const loadTeachers = async () => {
     try {
+      setLoading(true);
+
       const data = await teacherService.getAll();
       setTeachers(data);
     } catch (error) {
@@ -27,6 +30,19 @@ export function useTeachers() {
     await loadTeachers();
   };
 
+  const updateTeacher = async (
+    id: number,
+    teacher: UpdateTeacherDto
+  ) => {
+    await teacherService.update(id, teacher);
+    await loadTeachers();
+  };
+
+  const deleteTeacher = async (id: number) => {
+    await teacherService.delete(id);
+    await loadTeachers();
+  };
+
   useEffect(() => {
     loadTeachers();
   }, []);
@@ -35,6 +51,8 @@ export function useTeachers() {
     teachers,
     loading,
     createTeacher,
+    updateTeacher,
+    deleteTeacher,
     refreshTeachers: loadTeachers,
   };
 }

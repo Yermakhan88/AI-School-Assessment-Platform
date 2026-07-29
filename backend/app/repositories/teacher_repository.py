@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.teacher import Teacher
-from app.schemas.teacher import TeacherCreate
+from app.schemas.teacher import TeacherCreate, TeacherUpdate
 
 
 class TeacherRepository:
@@ -30,8 +30,37 @@ class TeacherRepository:
         return db_teacher
 
     @staticmethod
+    def update(
+        db: Session,
+        teacher_id: int,
+        teacher: TeacherUpdate,
+    ):
+        db_teacher = (
+            db.query(Teacher)
+            .filter(Teacher.id == teacher_id)
+            .first()
+        )
+
+        if db_teacher is None:
+            return None
+
+        db_teacher.full_name = teacher.full_name
+        db_teacher.email = teacher.email
+        db_teacher.subject = teacher.subject
+        db_teacher.is_active = teacher.is_active
+
+        db.commit()
+        db.refresh(db_teacher)
+
+        return db_teacher
+
+    @staticmethod
     def delete(db: Session, teacher_id: int):
-        teacher = db.query(Teacher).filter(Teacher.id == teacher_id).first()
+        teacher = (
+            db.query(Teacher)
+            .filter(Teacher.id == teacher_id)
+            .first()
+        )
 
         if teacher:
             db.delete(teacher)

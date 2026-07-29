@@ -7,7 +7,9 @@ import TeacherDialog from "./TeacherDialog";
 import { CreateTeacherDto } from "@/services/teacher.service";
 
 interface Props {
-  onTeacherCreated: (teacher: CreateTeacherDto) => Promise<void>;
+  onTeacherCreated: (
+    teacher: CreateTeacherDto
+  ) => Promise<void>;
 }
 
 export default function TeacherToolbar({
@@ -21,6 +23,7 @@ export default function TeacherToolbar({
       />
 
       <TeacherDialog
+        mode="create"
         onTeacherCreated={onTeacherCreated}
       />
     </div>
