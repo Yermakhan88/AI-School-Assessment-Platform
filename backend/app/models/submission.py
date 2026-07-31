@@ -7,6 +7,7 @@ from sqlalchemy import (
     String,
     Text,
 )
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
 from app.database.database import Base
@@ -63,3 +64,5 @@ class Submission(Base):
         String(50),
         default="Submitted",
     )
+
+    assignment = relationship("Assignment")

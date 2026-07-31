@@ -6,6 +6,7 @@ from app.api.student_router import router as student_router
 from app.api.subject_router import router as subject_router
 from app.api.assignment_router import router as assignment_router
 from app.api.auth_router import router as auth_router
+from app.api.submission_router import router as submission_router
 
 from app.database.database import Base, engine
 
@@ -15,6 +16,7 @@ from app.models.student import Student  # noqa: F401
 from app.models.subject import Subject  # noqa: F401
 from app.models.assignment import Assignment  # noqa: F401
 from app.models.user import User  # noqa: F401
+from app.models.submission import Submission  # noqa: F401
 
 # Создание таблиц
 Base.metadata.create_all(bind=engine)
@@ -51,6 +53,7 @@ app.include_router(student_router)
 app.include_router(subject_router)
 app.include_router(assignment_router)
 app.include_router(auth_router)
+app.include_router(submission_router)
 
 # ==========================
 # Endpoints
