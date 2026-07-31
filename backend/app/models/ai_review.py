@@ -1,3 +1,4 @@
+from sqlalchemy import JSON
 from sqlalchemy import (
     Column,
     DateTime,
@@ -40,19 +41,19 @@ class AIReview(Base):
     )
 
     strengths = Column(
-        Text,
-        nullable=True,
-    )
+    JSON,
+    nullable=True,
+)
 
-    weaknesses = Column(
-        Text,
-        nullable=True,
-    )
+weaknesses = Column(
+    JSON,
+    nullable=True,
+)
 
-    recommendations = Column(
-        Text,
-        nullable=True,
-    )
+recommendations = Column(
+    JSON,
+    nullable=True,
+)
 
     processing_time = Column(
         Float,

@@ -11,11 +11,11 @@ class AIReviewBase(BaseModel):
 
     feedback: str | None = None
 
-    strengths: str | None = None
+    strengths: list[str] = []
 
-    weaknesses: str | None = None
+    weaknesses: list[str] = []
 
-    recommendations: str | None = None
+    recommendations: list[str] = []
 
     processing_time: float | None = None
 
