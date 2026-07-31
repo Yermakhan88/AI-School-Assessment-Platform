@@ -1,11 +1,10 @@
 from sqlalchemy import Boolean, Column, Integer, String
-from sqlalchemy.orm import relationship
 
 from app.database.database import Base
 
 
-class Teacher(Base):
-    __tablename__ = "teachers"
+class User(Base):
+    __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
 
@@ -18,12 +17,17 @@ class Teacher(Base):
         index=True,
     )
 
-    subject = Column(String(150), nullable=False)
+    password_hash = Column(
+        String(255),
+        nullable=False,
+    )
 
-    is_active = Column(Boolean, default=True)
+    role = Column(
+        String(30),
+        nullable=False,
+    )
 
-    assignments = relationship(
-        "Assignment",
-        back_populates="teacher",
-        cascade="all, delete-orphan",
+    is_active = Column(
+        Boolean,
+        default=True,
     )

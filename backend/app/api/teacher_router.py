@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from app.auth.dependencies import require_role
 
 from app.database.database import get_db
 from app.schemas.teacher import (
@@ -38,7 +39,12 @@ def get_teacher(
     return teacher
 
 
-@router.post("/", response_model=TeacherResponse, status_code=201)
+@router.post(
+    "/", 
+    response_model=TeacherResponse, 
+    status_code=201,
+    dependencies=[Depends(require_role("ADMIN"))],
+)
 def create_teacher(
     teacher: TeacherCreate,
     db: Session = Depends(get_db),
@@ -67,7 +73,10 @@ def update_teacher(
     return updated_teacher
 
 
-@router.delete("/{teacher_id}")
+@router.delete(
+    "/{teacher_id}",
+    dependencies=[Depends(require_role("ADMIN"))],
+)
 def delete_teacher(
     teacher_id: int,
     db: Session = Depends(get_db),

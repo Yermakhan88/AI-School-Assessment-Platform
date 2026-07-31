@@ -1,4 +1,5 @@
 from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.database.database import Base
 
@@ -17,9 +18,18 @@ class Subject(Base):
         index=True,
     )
 
-    description = Column(String(500), nullable=True)
+    description = Column(
+        String(500),
+        nullable=True,
+    )
 
     is_active = Column(
         Boolean,
         default=True,
+    )
+
+    assignments = relationship(
+        "Assignment",
+        back_populates="subject",
+        cascade="all, delete-orphan",
     )
