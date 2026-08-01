@@ -5,15 +5,19 @@ import { useState } from "react";
 import { saveTeacherReview } from "../api/teacherReviewApi";
 
 export function useTeacherReview() {
-  const [teacherScore, setTeacherScore] = useState<number | null>(null);
+  const [selectedSubmissionId, setSelectedSubmissionId] =
+    useState<number | null>(null);
+
+  const [teacherScore, setTeacherScore] =
+    useState<number | null>(null);
 
   const [loading, setLoading] = useState(false);
 
-  async function save(
-    submissionId: number,
-    approved: boolean,
-  ) {
-    if (teacherScore === null) {
+  async function save(approved: boolean) {
+    if (
+      selectedSubmissionId === null ||
+      teacherScore === null
+    ) {
       return;
     }
 
@@ -21,7 +25,7 @@ export function useTeacherReview() {
       setLoading(true);
 
       await saveTeacherReview({
-        submission_id: submissionId,
+        submission_id: selectedSubmissionId,
         teacher_score: teacherScore,
         approved,
       });
@@ -32,9 +36,14 @@ export function useTeacherReview() {
   }
 
   return {
+    selectedSubmissionId,
+    setSelectedSubmissionId,
+
     teacherScore,
     setTeacherScore,
+
     loading,
+
     save,
   };
 }
