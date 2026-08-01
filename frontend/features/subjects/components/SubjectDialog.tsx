@@ -52,9 +52,7 @@ export default function SubjectDialog({
     if (mode === "create") {
       if (!onSubjectCreated) return;
 
-      await onSubjectCreated(
-        data as CreateSubjectDto
-      );
+      await onSubjectCreated(data as CreateSubjectDto);
     } else {
       if (!subject || !onSubjectUpdated) return;
 
@@ -72,13 +70,19 @@ export default function SubjectDialog({
       open={open}
       onOpenChange={setOpen}
     >
-      <DialogTrigger asChild>
-        {trigger ?? (
-          <Button>
-            + Add Subject
-          </Button>
-        )}
-      </DialogTrigger>
+      <DialogTrigger
+        render={
+          trigger ? (
+            trigger
+          ) : (
+            <Button>
+              {mode === "create"
+                ? "+ Add Subject"
+                : "Edit Subject"}
+            </Button>
+          )
+        }
+      />
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

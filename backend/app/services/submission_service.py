@@ -46,6 +46,20 @@ class SubmissionService:
         )
 
     @staticmethod
+    def update_teacher_review(
+        db: Session,
+        submission_id: int,
+        teacher_score: float,
+        teacher_feedback: str,
+    ):
+        return SubmissionRepository.update_teacher_review(
+            db=db,
+            submission_id=submission_id,
+            teacher_score=teacher_score,
+            teacher_feedback=teacher_feedback,
+        )
+
+    @staticmethod
     def delete(
         db: Session,
         submission_id: int,

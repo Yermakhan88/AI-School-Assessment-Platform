@@ -1,10 +1,9 @@
-from abc import ABC, abstractmethod
+from typing import Protocol
 
 from app.ai.schemas import AIReviewResult
 
 
-class AIProvider(ABC):
-    @abstractmethod
+class AIProvider(Protocol):
     def review(
         self,
         prompt: str,
@@ -13,4 +12,4 @@ class AIProvider(ABC):
         """
         Analyze text and return structured AI review.
         """
-        raise NotImplementedError
+        ...

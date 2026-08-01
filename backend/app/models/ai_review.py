@@ -1,5 +1,5 @@
-from sqlalchemy import JSON
 from sqlalchemy import (
+    JSON,
     Column,
     DateTime,
     Float,
@@ -27,7 +27,7 @@ class AIReview(Base):
     model = Column(
         String(100),
         nullable=False,
-        default="gpt-5.5",
+        default="gpt-4.1-mini",
     )
 
     score = Column(
@@ -41,19 +41,19 @@ class AIReview(Base):
     )
 
     strengths = Column(
-    JSON,
-    nullable=True,
-)
+        JSON,
+        nullable=True,
+    )
 
-weaknesses = Column(
-    JSON,
-    nullable=True,
-)
+    weaknesses = Column(
+        JSON,
+        nullable=True,
+    )
 
-recommendations = Column(
-    JSON,
-    nullable=True,
-)
+    recommendations = Column(
+        JSON,
+        nullable=True,
+    )
 
     processing_time = Column(
         Float,
