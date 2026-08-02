@@ -1,34 +1,32 @@
 "use client";
 
-import { useMemo, useState } from "react";
-
 import { Input } from "@/components/ui/input";
 
 import AssignmentCard from "./AssignmentCard";
 
-import { assignments } from "../mock/assignments";
+import { Assignment } from "../types/assignment.types";
 
-export default function AssignmentLibrary() {
-  const [search, setSearch] = useState("");
+interface AssignmentLibraryProps {
+  assignments: Assignment[];
+  selectedId: number;
+  onSelect: (id: number) => void;
+}
 
-  const filtered = useMemo(() => {
-    return assignments.filter((assignment) =>
-      assignment.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-  }, [search]);
-
-  const active = filtered.filter(
-    (item) => item.status === "ACTIVE"
+export default function AssignmentLibrary({
+  assignments,
+  selectedId,
+  onSelect,
+}: AssignmentLibraryProps) {
+  const activeAssignments = assignments.filter(
+    (assignment) => assignment.status === "ACTIVE"
   );
 
-  const draft = filtered.filter(
-    (item) => item.status === "DRAFT"
+  const draftAssignments = assignments.filter(
+    (assignment) => assignment.status === "DRAFT"
   );
 
-  const archived = filtered.filter(
-    (item) => item.status === "ARCHIVED"
+  const archivedAssignments = assignments.filter(
+    (assignment) => assignment.status === "ARCHIVED"
   );
 
   return (
@@ -49,56 +47,72 @@ export default function AssignmentLibrary() {
         <Input
           className="mt-4"
           placeholder="Search assignment..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
         />
 
       </div>
 
       {/* Content */}
 
-      <div className="flex-1 overflow-auto p-5">
+      <div className="flex-1 overflow-y-auto p-5">
 
-        {/* ACTIVE */}
+        {/* Active */}
 
         <Section
           title="🟢 Active"
-          count={active.length}
+          count={activeAssignments.length}
         >
-          {active.map((assignment) => (
+
+          {activeAssignments.map((assignment) => (
+
             <AssignmentCard
               key={assignment.id}
               assignment={assignment}
+              active={assignment.id === selectedId}
+              onClick={() => onSelect(assignment.id)}
             />
+
           ))}
+
         </Section>
 
-        {/* DRAFT */}
+        {/* Draft */}
 
         <Section
           title="🟡 Draft"
-          count={draft.length}
+          count={draftAssignments.length}
         >
-          {draft.map((assignment) => (
+
+          {draftAssignments.map((assignment) => (
+
             <AssignmentCard
               key={assignment.id}
               assignment={assignment}
+              active={assignment.id === selectedId}
+              onClick={() => onSelect(assignment.id)}
             />
+
           ))}
+
         </Section>
 
-        {/* ARCHIVED */}
+        {/* Archived */}
 
         <Section
           title="⚪ Archived"
-          count={archived.length}
+          count={archivedAssignments.length}
         >
-          {archived.map((assignment) => (
+
+          {archivedAssignments.map((assignment) => (
+
             <AssignmentCard
               key={assignment.id}
               assignment={assignment}
+              active={assignment.id === selectedId}
+              onClick={() => onSelect(assignment.id)}
             />
+
           ))}
+
         </Section>
 
       </div>
@@ -119,24 +133,26 @@ function Section({
   children,
 }: SectionProps) {
   return (
-    <div className="mb-8">
+    <section className="mb-8">
 
       <div className="mb-4 flex items-center justify-between">
 
-        <h3 className="font-semibold">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-600">
           {title}
         </h3>
 
-        <span className="rounded-full bg-slate-100 px-2 py-1 text-xs">
+        <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium">
           {count}
         </span>
 
       </div>
 
       <div className="space-y-3">
+
         {children}
+
       </div>
 
-    </div>
+    </section>
   );
 }

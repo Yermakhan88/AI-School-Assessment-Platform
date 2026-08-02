@@ -1,7 +1,6 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 
 export default function ProgrammingSettingsCard() {
   return (
@@ -11,16 +10,52 @@ export default function ProgrammingSettingsCard() {
         Programming Settings
       </h2>
 
-      <div className="grid gap-4">
+      <div className="grid grid-cols-2 gap-4">
 
-        <Input placeholder="Programming Language" />
+        <InfoCard
+          title="Language"
+          value="Python"
+        />
 
-        <Input placeholder="Maximum Score" />
+        <InfoCard
+          title="Difficulty"
+          value="Medium"
+        />
 
-        <Input placeholder="Difficulty" />
+        <InfoCard
+          title="Maximum Score"
+          value="100"
+        />
+
+        <InfoCard
+          title="Deadline"
+          value="10 Sep 2026"
+        />
 
       </div>
 
     </Card>
+  );
+}
+
+function InfoCard({
+  title,
+  value,
+}: {
+  title: string;
+  value: string;
+}) {
+  return (
+    <div className="rounded-xl border bg-slate-50 p-4">
+
+      <p className="text-sm text-slate-500">
+        {title}
+      </p>
+
+      <p className="mt-2 font-semibold">
+        {value}
+      </p>
+
+    </div>
   );
 }

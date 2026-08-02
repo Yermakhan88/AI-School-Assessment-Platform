@@ -1,43 +1,60 @@
 "use client";
 
-import AssignmentToolbar from "./AssignmentToolbar";
-import AssignmentLibrary from "./AssignmentLibrary";
-import AssignmentCanvas from "./AssignmentCanvas";
 import AssignmentAssistant from "./AssignmentAssistant";
+import AssignmentCanvas from "./AssignmentCanvas";
+import AssignmentLibrary from "./AssignmentLibrary";
+import AssignmentToolbar from "./AssignmentToolbar";
+
+import { useAssignmentWorkspace } from "../hooks/useAssignmentWorkspace";
 
 export default function AssignmentWorkspace() {
-  return (
-    <div className="flex h-[calc(100vh-180px)] flex-col gap-6">
+  const {
+    assignments,
+    selectedAssignment,
+    selectedAssignmentId,
+    setSelectedAssignmentId,
+  } = useAssignmentWorkspace();
 
-      {/* Top Toolbar */}
+  return (
+    <div className="flex h-[calc(100vh-170px)] flex-col gap-6">
+
+      {/* Toolbar */}
 
       <AssignmentToolbar />
 
       {/* Workspace */}
 
-      <div className="grid flex-1 grid-cols-12 gap-6 overflow-hidden">
+      <div className="flex flex-1 gap-6 overflow-hidden">
 
         {/* Library */}
 
-        <aside className="col-span-3 overflow-hidden rounded-2xl border bg-white shadow-sm">
+        <aside className="w-80 flex-shrink-0 rounded-2xl border bg-white shadow-sm">
 
-          <AssignmentLibrary />
+          <AssignmentLibrary
+            assignments={assignments}
+            selectedId={selectedAssignmentId}
+            onSelect={setSelectedAssignmentId}
+          />
 
         </aside>
 
         {/* Canvas */}
 
-        <main className="col-span-6 overflow-auto rounded-2xl border bg-white shadow-sm">
+        <main className="flex-1 min-w-0 overflow-auto rounded-2xl border bg-slate-50 shadow-sm">
 
-          <AssignmentCanvas />
+          <AssignmentCanvas
+            assignment={selectedAssignment}
+          />
 
         </main>
 
-        {/* AI Assistant */}
+        {/* AI */}
 
-        <aside className="col-span-3 overflow-hidden rounded-2xl border bg-white shadow-sm">
+        <aside className="w-72 flex-shrink-0 rounded-2xl border bg-white shadow-sm">
 
-          <AssignmentAssistant />
+          <AssignmentAssistant
+            assignment={selectedAssignment}
+          />
 
         </aside>
 

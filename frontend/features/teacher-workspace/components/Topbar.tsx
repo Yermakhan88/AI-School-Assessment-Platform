@@ -6,14 +6,13 @@ export default function Topbar() {
   return (
     <header className="flex h-20 items-center justify-between border-b border-slate-200 bg-white px-8">
 
-      <div>
-
-        <h1 className="text-2xl font-bold text-slate-900">
-          Teacher Workspace
-        </h1>
+       <div>
+          <h1 className="text-2xl font-bold text-slate-900">
+            Good evening, Ermek 👋
+          </h1>
 
         <p className="text-sm text-slate-500">
-          Welcome back! Continue your work.
+          Ready to continue your teaching?
         </p>
 
       </div>
