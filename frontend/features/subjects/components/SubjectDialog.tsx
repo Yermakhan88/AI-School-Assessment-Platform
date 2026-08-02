@@ -70,19 +70,15 @@ export default function SubjectDialog({
       open={open}
       onOpenChange={setOpen}
     >
-      <DialogTrigger
-        render={
-          trigger ? (
-            trigger
-          ) : (
-            <Button>
-              {mode === "create"
-                ? "+ Add Subject"
-                : "Edit Subject"}
-            </Button>
-          )
-        }
-      />
+      <DialogTrigger asChild>
+        {trigger ?? (
+        <Button>
+          {mode === "create"
+            ? "+ Add Subject"
+            : "Edit Subject"}
+        </Button>
+      )}
+    </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>

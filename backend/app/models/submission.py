@@ -45,6 +45,11 @@ class Submission(Base):
         server_default=func.now(),
     )
 
+    reviewed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+    )
+
     ai_score = Column(
         Float,
         nullable=True,
@@ -55,14 +60,28 @@ class Submission(Base):
         nullable=True,
     )
 
-    feedback = Column(
+    ai_feedback = Column(
+        Text,
+        nullable=True,
+    )
+
+    teacher_feedback = Column(
         Text,
         nullable=True,
     )
 
     status = Column(
         String(50),
-        default="Submitted",
+        default="UPLOADED",
     )
 
-    assignment = relationship("Assignment")
+    # Relationships
+    assignment = relationship(
+        "Assignment",
+        lazy="joined",
+    )
+
+    student = relationship(
+        "Student",
+        lazy="joined",
+    )

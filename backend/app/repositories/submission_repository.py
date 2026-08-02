@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.constants.submission_status import SubmissionStatus
 from app.models.submission import Submission
@@ -16,6 +16,10 @@ class SubmissionRepository:
     def get_all(db: Session):
         return (
             db.query(Submission)
+            .options(
+                joinedload(Submission.student),
+                joinedload(Submission.assignment),
+            )
             .order_by(Submission.id.desc())
             .all()
         )
@@ -27,6 +31,10 @@ class SubmissionRepository:
     ):
         return (
             db.query(Submission)
+            .options(
+                joinedload(Submission.student),
+                joinedload(Submission.assignment),
+            )
             .filter(Submission.id == submission_id)
             .first()
         )

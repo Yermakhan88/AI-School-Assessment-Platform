@@ -1,31 +1,11 @@
-import DashboardLayout from "@/components/layout/DashboardLayout";
-import StatCard from "@/components/dashboard/StatCard";
-import { dashboardStats } from "@/constants/dashboard";
+import LoginCard from "@/features/auth/components/LoginCard";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <DashboardLayout>
-      <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold">
-            Welcome back 👋
-          </h1>
+    <main className="flex min-h-screen items-center justify-center bg-slate-100 p-6">
 
-          <p className="mt-2 text-slate-500">
-            AI School Assessment Platform Dashboard
-          </p>
-        </div>
+      <LoginCard />
 
-        <div className="grid grid-cols-4 gap-6">
-          {dashboardStats.map((item) => (
-            <StatCard
-              key={item.title}
-              title={item.title}
-              value={item.value}
-            />
-          ))}
-        </div>
-      </div>
-    </DashboardLayout>
+    </main>
   );
 }

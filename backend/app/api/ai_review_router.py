@@ -1,7 +1,10 @@
+import traceback
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
+from app.schemas.ai_review import AIReviewResponse
 from app.services.ai_review_service import AIReviewService
 
 router = APIRouter(
@@ -12,7 +15,10 @@ router = APIRouter(
 service = AIReviewService()
 
 
-@router.post("/{submission_id}")
+@router.post(
+    "/{submission_id}",
+    response_model=AIReviewResponse,
+)
 def review_submission(
     submission_id: int,
     db: Session = Depends(get_db),
@@ -29,8 +35,6 @@ def review_submission(
             detail=str(e),
         )
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=str(e),
-        )
+    except Exception:
+        traceback.print_exc()
+        raise

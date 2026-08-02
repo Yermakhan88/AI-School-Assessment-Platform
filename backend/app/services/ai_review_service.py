@@ -1,4 +1,5 @@
 import time
+import traceback
 
 from sqlalchemy.orm import Session
 
@@ -8,6 +9,8 @@ from app.ai.prompt_builder import PromptBuilder
 from app.ai.providers.base import AIProvider
 from app.ai.providers.openai_provider import OpenAIProvider
 from app.ai.request import AIReviewRequest
+
+from app.constants.submission_status import SubmissionStatus
 
 from app.repositories.ai_review_repository import AIReviewRepository
 from app.repositories.submission_repository import SubmissionRepository
@@ -60,10 +63,10 @@ class AIReviewService:
         try:
             result = self.provider.review(request)
 
-        except Exception as e:
-            raise RuntimeError(
-                f"AI review failed: {e}"
-            ) from e
+        except Exception:
+            traceback.print_exc()
+            raise
+            
 
         elapsed = round(
             time.perf_counter() - start,
@@ -74,7 +77,6 @@ class AIReviewService:
             submission_id=submission.id,
             model=MODEL,
             score=result.score,
-            grade=result.grade,
             feedback=result.summary,
             strengths=result.strengths,
             weaknesses=result.weaknesses,
@@ -82,7 +84,20 @@ class AIReviewService:
             processing_time=elapsed,
         )
 
-        return AIReviewRepository.create(
+        ai_review = AIReviewRepository.create(
             db,
             review,
         )
+
+        #
+        # Update Submission
+        #
+
+        submission.ai_score = result.score
+        submission.ai_feedback = result.summary
+        submission.status = SubmissionStatus.AI_REVIEWED
+
+        db.commit()
+        db.refresh(submission)
+
+        return ai_review

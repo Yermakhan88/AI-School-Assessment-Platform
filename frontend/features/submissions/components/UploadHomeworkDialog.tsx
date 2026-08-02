@@ -34,12 +34,10 @@ export default function UploadHomeworkDialog({
   const [uploading, setUploading] =
     useState(false);
 
-  const handleUpload = async () => {
+  async function handleUpload() {
     if (!file) return;
 
     const formData = new FormData();
-
-    formData.append("file", file);
 
     formData.append(
       "assignment_id",
@@ -51,18 +49,24 @@ export default function UploadHomeworkDialog({
       studentId.toString()
     );
 
-    setUploading(true);
+    formData.append(
+      "file",
+      file,
+    );
 
     try {
+      setUploading(true);
+
       await onUpload(formData);
+
+      setOpen(false);
 
       setFile(null);
 
-      setOpen(false);
     } finally {
       setUploading(false);
     }
-  };
+  }
 
   return (
     <Dialog
@@ -95,10 +99,10 @@ export default function UploadHomeworkDialog({
 
           <Button
             className="w-full"
-            onClick={handleUpload}
             disabled={
-              uploading || file === null
+              uploading || !file
             }
+            onClick={handleUpload}
           >
             {uploading
               ? "Uploading..."
@@ -106,6 +110,7 @@ export default function UploadHomeworkDialog({
           </Button>
 
         </div>
+
       </DialogContent>
     </Dialog>
   );

@@ -11,6 +11,40 @@ export default function AIReviewCard({
   review,
   loading,
 }: Props) {
+  if (loading) {
+    return (
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <h2 className="mb-6 text-xl font-semibold">
+          🤖 AI Review
+        </h2>
+
+        <p className="text-slate-500">
+          Analyzing submission...
+        </p>
+      </div>
+    );
+  }
+
+  if (!review) {
+    return (
+      <div className="rounded-xl border bg-white p-6 shadow-sm">
+        <h2 className="mb-6 text-xl font-semibold">
+          🤖 AI Review
+        </h2>
+
+        <p className="text-slate-500">
+          Select a submission and click
+          <br />
+          <strong>🤖 Analyze</strong>
+        </p>
+      </div>
+    );
+  }
+
+  const strengths = review.strengths ?? [];
+  const weaknesses = review.weaknesses ?? [];
+  const recommendations = review.recommendations ?? [];
+
   return (
     <div className="rounded-xl border bg-white p-6 shadow-sm">
 
@@ -18,123 +52,126 @@ export default function AIReviewCard({
         🤖 AI Review
       </h2>
 
-      {loading && (
-        <p className="text-slate-500">
-          Analyzing submission...
-        </p>
-      )}
+      <div className="space-y-5">
 
-      {!loading && !review && (
-        <p className="text-slate-500">
-          Select a submission and click
-          <br />
-          <strong>🤖 Analyze</strong>
-        </p>
-      )}
+        <div>
 
-      {!loading && review && (
-        <div className="space-y-5">
-
-          <div>
-
-            <div className="text-sm text-slate-500">
-              Score
-            </div>
-
-            <div className="text-4xl font-bold">
-              {review.score}/100
-            </div>
-
+          <div className="text-sm text-slate-500">
+            Score
           </div>
 
+          <div className="text-4xl font-bold">
+            {review.score}/100
+          </div>
+
+        </div>
+
+        {review.grade && (
           <div>
 
             <div className="text-sm text-slate-500">
               Grade
             </div>
 
-            <div className="font-semibold">
+            <div className="font-semibold text-lg">
               {review.grade}
             </div>
 
           </div>
+        )}
 
-          <div>
+        <div>
 
-            <div className="text-sm text-slate-500">
-              Summary
-            </div>
-
-            <p>{review.feedback}</p>
-
+          <div className="text-sm text-slate-500">
+            Summary
           </div>
 
-          <div>
+          <p className="leading-7">
+            {review.feedback}
+          </p>
 
-            <h3 className="font-semibold">
-              ✅ Strengths
-            </h3>
+        </div>
 
-            <ul className="list-disc pl-5">
+        <div>
 
-              {review.strengths.map((item) => (
-                <li key={item}>
+          <h3 className="font-semibold text-green-700">
+            ✅ Strengths
+          </h3>
+
+          {strengths.length === 0 ? (
+            <p className="text-slate-500">
+              No strengths available.
+            </p>
+          ) : (
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              {strengths.map((item, index) => (
+                <li key={index}>
                   {item}
                 </li>
               ))}
-
             </ul>
+          )}
 
-          </div>
+        </div>
 
-          <div>
+        <div>
 
-            <h3 className="font-semibold">
-              ⚠ Weaknesses
-            </h3>
+          <h3 className="font-semibold text-red-700">
+            ⚠ Weaknesses
+          </h3>
 
-            <ul className="list-disc pl-5">
-
-              {review.weaknesses.map((item) => (
-                <li key={item}>
+          {weaknesses.length === 0 ? (
+            <p className="text-slate-500">
+              No weaknesses available.
+            </p>
+          ) : (
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              {weaknesses.map((item, index) => (
+                <li key={index}>
                   {item}
                 </li>
               ))}
-
             </ul>
+          )}
 
-          </div>
+        </div>
 
-          <div>
+        <div>
 
-            <h3 className="font-semibold">
-              💡 Recommendations
-            </h3>
+          <h3 className="font-semibold text-amber-700">
+            💡 Recommendations
+          </h3>
 
-            <ul className="list-disc pl-5">
-
-              {review.recommendations.map((item) => (
-                <li key={item}>
+          {recommendations.length === 0 ? (
+            <p className="text-slate-500">
+              No recommendations available.
+            </p>
+          ) : (
+            <ul className="mt-2 list-disc pl-5 space-y-1">
+              {recommendations.map((item, index) => (
+                <li key={index}>
                   {item}
                 </li>
               ))}
-
             </ul>
+          )}
 
+        </div>
+
+        <div className="border-t pt-4 text-sm text-slate-500">
+
+          <div>
+            <strong>Model:</strong> {review.model}
           </div>
 
-          <div className="border-t pt-4 text-sm text-slate-500">
-
-            Model: {review.model}
-
-            <br />
-
-            Processing time: {review.processing_time}s
-
+          <div>
+            <strong>Processing time:</strong>{" "}
+            {review.processing_time}s
           </div>
 
         </div>
-      )}
+
+      </div>
 
     </div>
   );

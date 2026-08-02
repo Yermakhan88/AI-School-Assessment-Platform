@@ -1,19 +1,31 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 
-import { saveTeacherReview } from "../api/teacherReviewApi";
+import { submissionService } from "@/services/submission.service";
 
 export function useTeacherReview() {
-  const [selectedSubmissionId, setSelectedSubmissionId] =
-    useState<number | null>(null);
+  const [
+    selectedSubmissionId,
+    setSelectedSubmissionId,
+  ] = useState<number | null>(null);
 
-  const [teacherScore, setTeacherScore] =
-    useState<number | null>(null);
+  const [
+    teacherScore,
+    setTeacherScore,
+  ] = useState<number | null>(null);
+
+  const [
+    teacherFeedback,
+    setTeacherFeedback,
+  ] = useState("");
 
   const [loading, setLoading] = useState(false);
 
-  async function save(approved: boolean) {
+  async function save(
+    refreshSubmissions?: () => Promise<void>,
+  ) {
     if (
       selectedSubmissionId === null ||
       teacherScore === null
@@ -24,11 +36,28 @@ export function useTeacherReview() {
     try {
       setLoading(true);
 
-      await saveTeacherReview({
-        submission_id: selectedSubmissionId,
-        teacher_score: teacherScore,
-        approved,
-      });
+      await submissionService.saveTeacherReview(
+        selectedSubmissionId,
+        {
+          teacher_score: teacherScore,
+          teacher_feedback: teacherFeedback,
+        },
+      );
+
+      if (refreshSubmissions) {
+        await refreshSubmissions();
+      }
+
+      toast.success(
+        "Teacher review saved.",
+      );
+
+    } catch (error) {
+      console.error(error);
+
+      toast.error(
+        "Failed to save teacher review.",
+      );
 
     } finally {
       setLoading(false);
@@ -41,6 +70,9 @@ export function useTeacherReview() {
 
     teacherScore,
     setTeacherScore,
+
+    teacherFeedback,
+    setTeacherFeedback,
 
     loading,
 

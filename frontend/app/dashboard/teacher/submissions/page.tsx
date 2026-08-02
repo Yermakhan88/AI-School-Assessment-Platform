@@ -4,6 +4,8 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import PageHeader from "@/components/common/PageHeader";
 import LoadingState from "@/components/common/LoadingState";
 import EmptyState from "@/components/common/EmptyState";
+import TeacherReviewPanel from "@/features/teacher-review/components/TeacherReviewPanel";
+import { useTeacherReview } from "@/features/teacher-review/hooks/useTeacherReview";
 
 import { useSubmissions } from "@/features/submissions/hooks/useSubmissions";
 
@@ -14,6 +16,7 @@ export default function TeacherSubmissionsPage() {
   const {
     submissions,
     loading,
+    refreshSubmissions,
   } = useSubmissions();
 
   const {
@@ -21,6 +24,21 @@ export default function TeacherSubmissionsPage() {
     loading: aiLoading,
     analyze,
   } = useAIReview();
+
+  const {
+    selectedSubmissionId,
+    setSelectedSubmissionId,
+
+    teacherScore,
+    setTeacherScore,
+
+    teacherFeedback,
+    setTeacherFeedback,
+
+    loading: teacherLoading,
+
+    save,
+  } = useTeacherReview();
 
   if (loading) {
     return (
@@ -109,11 +127,11 @@ export default function TeacherSubmissionsPage() {
                     >
 
                       <td className="p-4">
-                        {submission.student_id}
+                        {submission.student.full_name}
                       </td>
 
                       <td className="p-4">
-                        {submission.assignment_id}
+                        {submission.assignment.title}
                       </td>
 
                       <td className="p-4">
@@ -160,9 +178,19 @@ export default function TeacherSubmissionsPage() {
                       <td className="p-4 text-center">
 
                         <button
-                          onClick={() =>
-                            analyze(submission.id)
-                          }
+                          onClick={async () => {
+                            setSelectedSubmissionId(submission.id);
+
+                            setTeacherScore(
+                              submission.teacher_score ?? null
+                            );
+                            
+                            setTeacherFeedback(
+                              submission.teacher_feedback ?? ""
+                            );
+
+                            await analyze(submission.id);
+                          }}
                           disabled={aiLoading}
                           className="rounded bg-emerald-600 px-3 py-2 text-white hover:bg-emerald-700 disabled:opacity-50"
                         >
@@ -187,6 +215,25 @@ export default function TeacherSubmissionsPage() {
             review={review}
             loading={aiLoading}
           />
+
+          <TeacherReviewPanel
+            aiScore={review?.score ?? null}
+            teacherScore={teacherScore}
+            teacherFeedback={teacherFeedback}
+            loading={teacherLoading}
+            onTeacherScoreChange={setTeacherScore}
+            onTeacherFeedbackChange={setTeacherFeedback}
+            onSave={async () => {
+              await save(refreshSubmissions);
+            }}
+            onApprove={async () => {
+              await save(refreshSubmissions);
+            }}
+            onReject={() => {
+              setTeacherScore(null);
+              setTeacherFeedback("");
+            }}
+        />
 
         </div>
 

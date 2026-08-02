@@ -33,7 +33,9 @@ class AIReviewRepository:
         db: Session,
         review: AIReviewCreate,
     ):
-        db_review = AIReview(**review.model_dump())
+        db_review = AIReview(
+            **review.model_dump()
+        )
 
         db.add(db_review)
         db.commit()
@@ -56,7 +58,9 @@ class AIReviewRepository:
         if db_review is None:
             return None
 
-        data = review.model_dump()
+        data = review.model_dump(
+            exclude_unset=True
+        )
 
         for key, value in data.items():
             setattr(db_review, key, value)

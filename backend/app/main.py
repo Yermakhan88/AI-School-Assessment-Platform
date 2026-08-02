@@ -8,6 +8,9 @@ from app.api.assignment_router import router as assignment_router
 from app.api.auth_router import router as auth_router
 from app.api.submission_router import router as submission_router
 from app.api.ai_review_router import router as ai_review_router
+from app.api.dashboard_router import router as dashboard_router
+from app.api.report_router import router as report_router
+from app.api.settings_router import router as settings_router
 
 from app.database.database import Base, engine
 
@@ -57,6 +60,9 @@ app.include_router(assignment_router)
 app.include_router(auth_router)
 app.include_router(submission_router)
 app.include_router(ai_review_router)
+app.include_router(dashboard_router)
+app.include_router(report_router)
+app.include_router(settings_router)
 
 # ==========================
 # Endpoints

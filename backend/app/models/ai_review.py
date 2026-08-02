@@ -35,6 +35,11 @@ class AIReview(Base):
         nullable=True,
     )
 
+    grade = Column(
+        String(50),
+        nullable=True,
+    )
+
     feedback = Column(
         Text,
         nullable=True,

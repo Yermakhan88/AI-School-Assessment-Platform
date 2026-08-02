@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -12,31 +12,36 @@ export function useSubmissions() {
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const loadSubmissions = async () => {
+  const loadSubmissions = useCallback(async () => {
     try {
       setLoading(true);
 
       const data = await submissionService.getAll();
 
       setSubmissions(data);
+
     } catch (error) {
       console.error(error);
 
       toast.error("Failed to load submissions");
+
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const uploadSubmission = async (
-    formData: FormData
+    formData: FormData,
   ) => {
     try {
       await submissionService.upload(formData);
 
       await loadSubmissions();
 
-      toast.success("Homework uploaded successfully");
+      toast.success(
+        "Homework uploaded successfully",
+      );
+
     } catch (error) {
       console.error(error);
 
@@ -46,12 +51,15 @@ export function useSubmissions() {
 
   useEffect(() => {
     loadSubmissions();
-  }, []);
+  }, [loadSubmissions]);
 
   return {
     submissions,
+
     loading,
+
     uploadSubmission,
+
     refreshSubmissions: loadSubmissions,
   };
 }

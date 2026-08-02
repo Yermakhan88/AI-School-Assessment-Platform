@@ -8,9 +8,13 @@ interface Props {
 
   teacherScore: number | null;
 
+  teacherFeedback: string;
+
   loading: boolean;
 
   onTeacherScoreChange: (value: number) => void;
+
+  onTeacherFeedbackChange: (value: string) => void;
 
   onSave: () => void;
 
@@ -22,8 +26,10 @@ interface Props {
 export default function TeacherReviewPanel({
   aiScore,
   teacherScore,
+  teacherFeedback,
   loading,
   onTeacherScoreChange,
+  onTeacherFeedbackChange,
   onSave,
   onApprove,
   onReject,
@@ -34,9 +40,9 @@ export default function TeacherReviewPanel({
       <TeacherScoreCard
         aiScore={aiScore}
         teacherScore={teacherScore}
-        onTeacherScoreChange={
-          onTeacherScoreChange
-        }
+        teacherFeedback={teacherFeedback}
+        onTeacherScoreChange={onTeacherScoreChange}
+        onTeacherFeedbackChange={onTeacherFeedbackChange}
       />
 
       <TeacherReviewActions

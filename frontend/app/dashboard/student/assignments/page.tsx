@@ -23,7 +23,7 @@ export default function StudentAssignmentsPage() {
   // Пока временно.
   // После завершения Authentication
   // будет использоваться currentUser.id
-  const studentId = 1;
+  const studentId = 2;
 
   if (loading) {
     return (

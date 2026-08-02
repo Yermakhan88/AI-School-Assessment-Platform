@@ -82,9 +82,9 @@ export default function AssignmentDialog({
     >
       <DialogTrigger asChild>
         {trigger ?? (
-          <Button>
-            + Add Assignment
-          </Button>
+            <Button>
+              + Add Assignment
+            </Button>
         )}
       </DialogTrigger>
 

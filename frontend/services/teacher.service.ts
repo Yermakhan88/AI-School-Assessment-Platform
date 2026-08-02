@@ -1,3 +1,5 @@
+import { getAuthHeaders } from "./api";
+
 const API_URL = "http://127.0.0.1:8000/api/teachers";
 
 export interface Teacher {
@@ -46,9 +48,7 @@ export const teacherService = {
   async create(data: CreateTeacherDto): Promise<Teacher> {
     const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
 
@@ -65,9 +65,7 @@ export const teacherService = {
   ): Promise<Teacher> {
     const response = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
 

@@ -3,6 +3,24 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 
+class StudentShort(BaseModel):
+    id: int
+    full_name: str
+
+    model_config = ConfigDict(
+        from_attributes=True
+    )
+
+
+class AssignmentShort(BaseModel):
+    id: int
+    title: str
+
+    model_config = ConfigDict(
+        from_attributes=True
+    )
+
+
 class SubmissionBase(BaseModel):
     assignment_id: int
 
@@ -37,6 +55,10 @@ class SubmissionResponse(SubmissionBase):
     submitted_at: datetime
 
     reviewed_at: datetime | None = None
+
+    student: StudentShort
+
+    assignment: AssignmentShort
 
     model_config = ConfigDict(
         from_attributes=True

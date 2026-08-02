@@ -1,69 +1,18 @@
-import Link from "next/link";
-import {
-  LayoutDashboard,
-  GraduationCap,
-  Users,
-  BookOpen,
-  ClipboardList,
-  Bot,
-  BarChart3,
-  FileText,
-  Settings,
-} from "lucide-react";
+"use client";
 
-const menuItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Teachers",
-    href: "/teachers",
-    icon: GraduationCap,
-  },
-  {
-    title: "Students",
-    href: "/students",
-    icon: Users,
-  },
-  {
-    title: "Subjects",
-    href: "/subjects",
-    icon: BookOpen,
-  },
-  {
-    title: "Assignments",
-    href: "/assignments",
-    icon: ClipboardList,
-  },
-  {
-    title: "AI Assessment",
-    href: "/ai",
-    icon: Bot,
-  },
-  {
-    title: "Analytics",
-    href: "/analytics",
-    icon: BarChart3,
-  },
-  {
-    title: "Reports",
-    href: "/reports",
-    icon: FileText,
-  },
-  {
-    title: "Settings",
-    href: "/settings",
-    icon: Settings,
-  },
-];
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import { navigation } from "@/constants/navigation";
 
 export default function Sidebar() {
+  const pathname = usePathname();
+
   return (
     <aside className="w-64 min-h-screen bg-slate-900 text-white flex flex-col">
 
       <div className="p-6 border-b border-slate-700">
+
         <h1 className="text-2xl font-bold">
           AI School
         </h1>
@@ -71,30 +20,48 @@ export default function Sidebar() {
         <p className="text-sm text-slate-400 mt-1">
           Assessment Platform
         </p>
+
       </div>
 
       <nav className="flex-1 p-4 space-y-2">
 
-        {menuItems.map((item) => {
+        {navigation.map((item) => {
+
           const Icon = item.icon;
 
+          const active = pathname === item.href;
+
           return (
+
             <Link
               key={item.title}
               href={item.href}
-              className="w-full flex items-center gap-3 rounded-lg px-4 py-3 hover:bg-slate-800 transition"
+              className={`flex items-center gap-3 rounded-lg px-4 py-3 transition-all
+
+              ${
+                active
+                  ? "bg-blue-600 text-white shadow-md"
+                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+              }`}
             >
+
               <Icon size={20} />
 
               <span>{item.title}</span>
+
             </Link>
+
           );
         })}
 
       </nav>
 
-      <div className="p-4 border-t border-slate-700 text-center text-xs text-slate-400">
-        Version 1.0
+      <div className="border-t border-slate-700 p-4">
+
+        <p className="text-xs text-slate-500 text-center">
+          Version 1.0
+        </p>
+
       </div>
 
     </aside>

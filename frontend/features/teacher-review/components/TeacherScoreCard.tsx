@@ -5,13 +5,19 @@ interface Props {
 
   teacherScore: number | null;
 
+  teacherFeedback: string;
+
   onTeacherScoreChange: (value: number) => void;
+
+  onTeacherFeedbackChange: (value: string) => void;
 }
 
 export default function TeacherScoreCard({
   aiScore,
   teacherScore,
+  teacherFeedback,
   onTeacherScoreChange,
+  onTeacherFeedbackChange,
 }: Props) {
   return (
     <div className="rounded-xl border bg-white p-6 shadow-sm">
@@ -20,25 +26,27 @@ export default function TeacherScoreCard({
         👨‍🏫 Teacher Review
       </h2>
 
-      <div className="space-y-5">
+      <div className="space-y-6">
 
         <div>
 
-          <div className="text-sm text-slate-500">
+          <div className="mb-2 text-sm text-slate-500">
             AI Score
           </div>
 
-          <div className="text-3xl font-bold">
+          <div className="text-4xl font-bold">
+
             {aiScore ?? "-"}
+
           </div>
 
         </div>
 
         <div>
 
-          <div className="text-sm text-slate-500">
+          <label className="mb-2 block text-sm text-slate-500">
             Teacher Score
-          </div>
+          </label>
 
           <input
             type="number"
@@ -50,7 +58,27 @@ export default function TeacherScoreCard({
                 Number(e.target.value)
               )
             }
-            className="mt-2 w-full rounded-lg border p-3"
+            className="w-full rounded-lg border p-3"
+          />
+
+        </div>
+
+        <div>
+
+          <label className="mb-2 block text-sm text-slate-500">
+            Teacher Feedback
+          </label>
+
+          <textarea
+            rows={4}
+            value={teacherFeedback}
+            onChange={(e) =>
+              onTeacherFeedbackChange(
+                e.target.value
+              )
+            }
+            placeholder="Enter teacher comments..."
+            className="w-full rounded-lg border p-3 resize-none"
           />
 
         </div>

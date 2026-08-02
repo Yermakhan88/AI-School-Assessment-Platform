@@ -38,7 +38,7 @@ export const navigation = [
   },
   {
     title: "AI Assessment",
-    href: "/ai",
+    href: "/dashboard/teacher/submissions",
     icon: Bot,
   },
   {
