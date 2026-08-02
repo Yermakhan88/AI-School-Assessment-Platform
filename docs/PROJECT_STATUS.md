@@ -89,3 +89,15 @@ Documentation
 Last Update
 
 2026-08-02
+
+Current Sprint
+
+Sprint 2
+
+Current Module
+
+Assignment Canvas
+
+Status
+
+Ready to Start
