@@ -1,38 +1,72 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { AssignmentApi } from "@/features/assignment-management/api/assignmentApi";
 import { SubmissionApi } from "@/features/submission-review/api/submissionApi";
 
+import { Assignment } from "@/features/assignment-management/types/assignment.types";
+import { Submission } from "@/features/submission-review/types/submission.types";
+
+const CURRENT_STUDENT_ID = 2;
+
 export function useStudentWorkspace() {
-  const [assignment, setAssignment] = useState<any>(null);
-  const [submission, setSubmission] = useState<any>(null);
+  const [assignment, setAssignment] =
+    useState<Assignment | null>(null);
 
-  const [loading, setLoading] = useState(true);
+  const [submission, setSubmission] =
+    useState<Submission | null>(null);
 
-  async function refresh() {
+  const [loading, setLoading] =
+    useState(true);
+
+  const refresh = useCallback(async () => {
     try {
       setLoading(true);
 
-      const [assignments, submissions] =
-        await Promise.all([
-          AssignmentApi.getAll(),
-          SubmissionApi.getAll(),
-        ]);
+      const [
+        assignments,
+        submissions,
+      ] = await Promise.all([
+        AssignmentApi.getAll(),
+        SubmissionApi.getAll(),
+      ]);
 
-      setAssignment(assignments[0] ?? null);
+      const activeAssignment =
+        assignments.find(
+          (item) => item.is_active
+        ) ?? null;
 
-      setSubmission(submissions[0] ?? null);
+      setAssignment(activeAssignment);
+
+      const mySubmission =
+        submissions.find(
+          (item) =>
+            item.student?.id ===
+              CURRENT_STUDENT_ID &&
+            item.assignment?.id ===
+              activeAssignment?.id
+        ) ?? null;
+
+      setSubmission(mySubmission);
+
+    } catch (error) {
+      console.error(
+        "Student workspace error:",
+        error
+      );
+
+      setAssignment(null);
+      setSubmission(null);
 
     } finally {
       setLoading(false);
     }
-  }
+  }, []);
 
   useEffect(() => {
     refresh();
-  }, []);
+  }, [refresh]);
 
   return {
     assignment,

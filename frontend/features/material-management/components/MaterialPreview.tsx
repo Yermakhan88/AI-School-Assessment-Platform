@@ -1,10 +1,18 @@
 "use client";
 
-import { Sparkles, FileText, GraduationCap } from "lucide-react";
+import { useState } from "react";
+
+import {
+  Sparkles,
+  FileText,
+  GraduationCap,
+  Loader2,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { Material } from "../types/material.types";
+import { useMaterials } from "../hooks/useMaterials";
 
 interface Props {
   material?: Material;
@@ -13,9 +21,17 @@ interface Props {
 export default function MaterialPreview({
   material,
 }: Props) {
+  const {
+    analyze,
+    analyzing,
+  } = useMaterials();
+
+  const [result, setResult] =
+    useState<Material | undefined>(
+      material,
+    );
 
   if (!material) {
-
     return (
       <div className="flex h-full items-center justify-center rounded-2xl border bg-white">
         <p className="text-slate-500">
@@ -23,118 +39,122 @@ export default function MaterialPreview({
         </p>
       </div>
     );
-
   }
 
-  async function handleGenerate() {
+  async function handleAnalyze() {
+    await analyze(material.id);
 
-    alert(
-      "Next Sprint:\nAI Assignment Generator"
-    );
-
+    setResult({
+      ...material,
+      is_processed: true,
+    });
   }
+
+  const current =
+    result ?? material;
 
   return (
-
     <div className="rounded-2xl border bg-white p-6 shadow-sm">
 
       <h2 className="text-2xl font-bold">
-
-        {material.title}
-
+        {current.title}
       </h2>
 
       <div className="mt-6 space-y-4">
 
         <div className="flex items-center gap-3">
-
           <FileText size={18} />
-
-          <span>
-
-            {material.filename}
-
-          </span>
-
+          <span>{current.filename}</span>
         </div>
 
         <div className="flex items-center gap-3">
-
           <GraduationCap size={18} />
-
           <span>
-
-            Grade {material.grade}
-
+            Grade {current.grade}
           </span>
-
         </div>
 
-        <div>
-
-          <span
-            className={`rounded-full px-3 py-1 text-sm ${
-              material.is_processed
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-            }`}
-          >
-
-            {material.is_processed
-              ? "AI Ready"
-              : "Uploaded"}
-
-          </span>
-
-        </div>
-
-      </div>
-
-      <div className="mt-10">
-
-        <Button
-          className="w-full"
-          onClick={handleGenerate}
+        <span
+          className={`inline-block rounded-full px-3 py-1 text-sm ${
+            current.is_processed
+              ? "bg-green-100 text-green-700"
+              : "bg-yellow-100 text-yellow-700"
+          }`}
         >
-
-          <Sparkles className="mr-2 h-4 w-4" />
-
-          Generate Assignment with AI
-
-        </Button>
+          {current.is_processed
+            ? "AI Ready"
+            : "Uploaded"}
+        </span>
 
       </div>
+
+      <Button
+        className="mt-8 w-full"
+        onClick={handleAnalyze}
+        disabled={analyzing}
+      >
+        {analyzing ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Analyzing...
+          </>
+        ) : (
+          <>
+            <Sparkles className="mr-2 h-4 w-4" />
+            Analyze with AI
+          </>
+        )}
+      </Button>
 
       <div className="mt-8 rounded-xl border border-dashed p-5">
 
         <h3 className="font-semibold">
-
           AI Result
-
         </h3>
 
-        <p className="mt-3 text-sm text-slate-500">
+        {current.is_processed ? (
+          <div className="mt-4 space-y-4">
 
-          Topic detection
+            <div>
+              <p className="text-xs uppercase text-slate-500">
+                Topic
+              </p>
 
-          <br />
+              <p>
+                {current.topic || "-"}
+              </p>
+            </div>
 
-          Bloom level
+            <div>
+              <p className="text-xs uppercase text-slate-500">
+                Learning Objectives
+              </p>
 
-          <br />
+              <pre className="whitespace-pre-wrap text-sm">
+                {current.learning_objectives || "-"}
+              </pre>
+            </div>
 
-          Assignment
+            <div>
+              <p className="text-xs uppercase text-slate-500">
+                Bloom Level
+              </p>
 
-          <br />
+              <p>
+                {current.bloom_level || "-"}
+              </p>
+            </div>
 
-          Rubric
-
-        </p>
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-slate-500">
+            Click "Analyze with AI" to analyze
+            the uploaded material.
+          </p>
+        )}
 
       </div>
 
     </div>
-
   );
-
 }

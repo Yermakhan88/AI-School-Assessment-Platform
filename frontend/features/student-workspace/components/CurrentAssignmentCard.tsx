@@ -1,9 +1,9 @@
 "use client";
 
-import { StudentAssignment } from "../types/studentWorkspace.types";
+import { Assignment } from "@/features/assignment-management/types/assignment.types";
 
 interface Props {
-  assignment: StudentAssignment | null | undefined;
+  assignment: Assignment | null;
 }
 
 export default function CurrentAssignmentCard({
@@ -22,7 +22,6 @@ export default function CurrentAssignmentCard({
         </p>
       ) : (
         <>
-
           <h3 className="mt-5 text-lg font-semibold">
             {assignment.title}
           </h3>
@@ -31,18 +30,29 @@ export default function CurrentAssignmentCard({
             {assignment.description}
           </p>
 
-          <div className="mt-6 text-sm">
+          <div className="mt-6 space-y-2 text-sm">
 
             <p>
-              Subject: {assignment.subject}
+              <strong>Subject:</strong>{" "}
+              {assignment.subject.name}
             </p>
 
             <p>
-              Due: {assignment.due_date}
+              <strong>Teacher:</strong>{" "}
+              {assignment.teacher.full_name}
+            </p>
+
+            <p>
+              <strong>Due Date:</strong>{" "}
+              {assignment.due_date}
+            </p>
+
+            <p>
+              <strong>Maximum Score:</strong>{" "}
+              {assignment.max_score}
             </p>
 
           </div>
-
         </>
       )}
 

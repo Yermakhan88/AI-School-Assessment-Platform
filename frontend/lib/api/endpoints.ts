@@ -34,6 +34,8 @@ export const ENDPOINTS = {
   MATERIALS: {
     LIST: "/materials/",
     UPLOAD: "/materials/upload",
+    ANALYZE: (id: number) =>
+    `/materials/${id}/analyze`,
   },
   
 };

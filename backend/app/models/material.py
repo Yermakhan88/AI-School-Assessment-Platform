@@ -5,6 +5,7 @@ from sqlalchemy import (
     Boolean,
     DateTime,
     ForeignKey,
+    Text,
 )
 
 from sqlalchemy.sql import func
@@ -61,6 +62,35 @@ class Material(Base):
     is_processed = Column(
         Boolean,
         default=False,
+    )
+
+    # ------------------------
+    # AI Analysis
+    # ------------------------
+
+    topic = Column(
+        Text,
+        nullable=True,
+    )
+
+    learning_objectives = Column(
+        Text,
+        nullable=True,
+    )
+
+    bloom_level = Column(
+        String,
+        nullable=True,
+    )
+
+    generated_assignment = Column(
+        Text,
+        nullable=True,
+    )
+
+    generated_rubric = Column(
+        Text,
+        nullable=True,
     )
 
     uploaded_at = Column(

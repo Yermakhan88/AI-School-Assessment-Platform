@@ -29,6 +29,20 @@ class MaterialResponse(BaseModel):
 
     is_processed: bool
 
+    # ------------------------
+    # AI Analysis
+    # ------------------------
+
+    topic: str | None = None
+
+    learning_objectives: str | None = None
+
+    bloom_level: str | None = None
+
+    generated_assignment: str | None = None
+
+    generated_rubric: str | None = None
+
     uploaded_at: datetime
 
     class Config:

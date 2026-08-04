@@ -10,8 +10,10 @@ import UploadHomeworkCard from "./UploadHomeworkCard";
 import { useStudentWorkspace } from "../hooks/useStudentWorkspace";
 
 export default function StudentWorkspace() {
+
   const {
-    dashboard,
+    assignment,
+    submission,
     loading,
   } = useStudentWorkspace();
 
@@ -33,11 +35,11 @@ export default function StudentWorkspace() {
       <div className="grid gap-6 xl:grid-cols-2">
 
         <CurrentAssignmentCard
-          assignment={dashboard?.assignment}
+          assignment={assignment}
         />
 
         <ProgressCard
-          submission={dashboard?.submission}
+          submission={submission}
         />
 
       </div>
@@ -45,13 +47,15 @@ export default function StudentWorkspace() {
       <div className="grid gap-6 xl:grid-cols-2">
 
         <UploadHomeworkCard />
+
         <RecommendationCard />
+
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-2">
+      <div className="grid gap-6">
 
         <FeedbackCard
-          submission={dashboard?.submission}
+          submission={submission}
         />
 
       </div>

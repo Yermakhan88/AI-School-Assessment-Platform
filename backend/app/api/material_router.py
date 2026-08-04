@@ -22,7 +22,10 @@ router = APIRouter(
 )
 
 UPLOAD_DIR = Path("uploads/materials")
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+UPLOAD_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
 
 
 @router.get(
@@ -33,6 +36,28 @@ def get_materials(
     db: Session = Depends(get_db),
 ):
     return MaterialService.get_all(db)
+
+
+@router.get(
+    "/{material_id}",
+    response_model=MaterialResponse,
+)
+def get_material(
+    material_id: int,
+    db: Session = Depends(get_db),
+):
+    material = MaterialService.get_by_id(
+        db,
+        material_id,
+    )
+
+    if material is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Material not found.",
+        )
+
+    return material
 
 
 @router.post(
@@ -47,7 +72,9 @@ async def upload_material(
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ):
-    extension = Path(file.filename).suffix.lower()
+    extension = Path(
+        file.filename
+    ).suffix.lower()
 
     if extension not in [
         ".pdf",
@@ -57,13 +84,22 @@ async def upload_material(
     ]:
         raise HTTPException(
             status_code=400,
-            detail="Unsupported file type",
+            detail="Unsupported file type.",
         )
 
-    filepath = UPLOAD_DIR / file.filename
+    filepath = (
+        UPLOAD_DIR /
+        file.filename
+    )
 
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    with open(
+        filepath,
+        "wb",
+    ) as buffer:
+        shutil.copyfileobj(
+            file.file,
+            buffer,
+        )
 
     material = Material(
         title=title,
@@ -80,3 +116,25 @@ async def upload_material(
         db,
         material,
     )
+
+
+@router.post(
+    "/{material_id}/analyze",
+    response_model=MaterialResponse,
+)
+def analyze_material(
+    material_id: int,
+    db: Session = Depends(get_db),
+):
+    material = MaterialService.analyze(
+        db,
+        material_id,
+    )
+
+    if material is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Material not found.",
+        )
+
+    return material

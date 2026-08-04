@@ -1,3 +1,4 @@
+import json
 import os
 
 from openai import OpenAI
@@ -10,21 +11,35 @@ client = OpenAI(
 class OpenAIService:
 
     @staticmethod
-    def generate(prompt: str) -> str:
+    def generate(prompt: str):
 
         response = client.chat.completions.create(
             model="gpt-4.1-mini",
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an educational AI assistant."
+                    "content": (
+                        "You are an educational AI assistant. "
+                        "Always return valid JSON only. "
+                        "Do not wrap the response in markdown."
+                    ),
                 },
                 {
                     "role": "user",
-                    "content": prompt
+                    "content": prompt,
                 },
             ],
-            temperature=0.3,
+            temperature=0.2,
+            response_format={
+                "type": "json_object"
+            },
         )
 
-        return response.choices[0].message.content
+        content = (
+            response
+            .choices[0]
+            .message
+            .content
+        )
+
+        return json.loads(content)

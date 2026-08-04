@@ -22,30 +22,11 @@ export const MaterialApi = {
 
     const formData = new FormData();
 
-    formData.append(
-      "title",
-      request.title,
-    );
-
-    formData.append(
-      "grade",
-      request.grade.toString(),
-    );
-
-    formData.append(
-      "teacher_id",
-      request.teacher_id.toString(),
-    );
-
-    formData.append(
-      "subject_id",
-      request.subject_id.toString(),
-    );
-
-    formData.append(
-      "file",
-      request.file,
-    );
+    formData.append("title", request.title);
+    formData.append("grade", request.grade.toString());
+    formData.append("teacher_id", request.teacher_id.toString());
+    formData.append("subject_id", request.subject_id.toString());
+    formData.append("file", request.file);
 
     const { data } =
       await http.post<Material>(
@@ -53,10 +34,23 @@ export const MaterialApi = {
         formData,
         {
           headers: {
-            "Content-Type":
-              "multipart/form-data",
+            "Content-Type": "multipart/form-data",
           },
         },
+      );
+
+    return data;
+  },
+
+  async analyze(
+    materialId: number,
+  ): Promise<Material> {
+
+    const { data } =
+      await http.post<Material>(
+        ENDPOINTS.MATERIALS.ANALYZE(
+          materialId,
+        ),
       );
 
     return data;

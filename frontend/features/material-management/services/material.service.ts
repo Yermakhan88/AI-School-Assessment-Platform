@@ -5,4 +5,7 @@ export const MaterialService = {
     MaterialApi.getAll(),
 
   upload: MaterialApi.upload,
+
+  analyze: (materialId: number) =>
+    MaterialApi.analyze(materialId),
 };

@@ -12,20 +12,31 @@ import {
 
 import { Button } from "@/components/ui/button";
 
+import { useUploadHomework } from "../hooks/useUploadHomework";
+
 interface Props {
   assignmentId: number;
   studentId: number;
-  onUpload: (formData: FormData) => Promise<void>;
 }
 
 export default function UploadHomeworkDialog({
   assignmentId,
   studentId,
-  onUpload,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState(false);
+
+  const { uploading, uploadHomework } = useUploadHomework({
+    onSuccess: () => {
+      setFile(null);
+      setOpen(false);
+
+      alert("Homework uploaded successfully.");
+    },
+    onError: () => {
+      alert("Upload failed.");
+    },
+  });
 
   async function handleUpload() {
     if (!file) return;
@@ -33,38 +44,25 @@ export default function UploadHomeworkDialog({
     const formData = new FormData();
 
     formData.append("file", file);
-    formData.append("assignment_id", assignmentId.toString());
-    formData.append("student_id", studentId.toString());
+    formData.append(
+      "assignment_id",
+      assignmentId.toString()
+    );
+    formData.append(
+      "student_id",
+      studentId.toString()
+    );
 
-    try {
-      setUploading(true);
-
-      await onUpload(formData);
-
-      setFile(null);
-      setOpen(false);
-
-      alert("Homework uploaded successfully.");
-    } catch (error) {
-      console.error(error);
-      alert("Upload failed.");
-    } finally {
-      setUploading(false);
-    }
+    await uploadHomework(formData);
   }
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={setOpen}
-    >
-      <DialogTrigger
-        render={
-          <Button>
-            Upload Homework
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button>
+          Upload Homework
+        </Button>
+      </DialogTrigger>
 
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
@@ -74,7 +72,6 @@ export default function UploadHomeworkDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-
           <input
             type="file"
             onChange={(e) =>
@@ -83,16 +80,13 @@ export default function UploadHomeworkDialog({
           />
 
           {file && (
-            <div className="rounded-md border bg-slate-50 p-3">
-
-              <p className="text-sm font-medium">
+            <div className="rounded-md border bg-slate-50 p-3 text-sm">
+              <p className="font-medium">
                 {file.name}
               </p>
-
-              <p className="text-xs text-slate-500">
+              <p className="text-slate-500">
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </p>
-
             </div>
           )}
 
@@ -101,9 +95,10 @@ export default function UploadHomeworkDialog({
             disabled={!file || uploading}
             onClick={handleUpload}
           >
-            {uploading ? "Uploading..." : "Upload"}
+            {uploading
+              ? "Uploading..."
+              : "Upload"}
           </Button>
-
         </div>
       </DialogContent>
     </Dialog>
