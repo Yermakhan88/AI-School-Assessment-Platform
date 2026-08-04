@@ -1,83 +1,59 @@
 "use client";
 
-import { DashboardStats } from "../types";
+import { GraduationCap, Users, BookOpen, FileText } from "lucide-react";
 
-interface Props {
-  stats: DashboardStats;
-}
+import StatCard from "@/features/teacher-workspace/components/StatCard";
 
-interface CardProps {
-  title: string;
-  value: number;
-  icon: string;
-}
+import { useDashboard } from "../hooks/useDashboard";
 
-function DashboardCard({
-  title,
-  value,
-  icon,
-}: CardProps) {
-  return (
-    <div className="rounded-xl border bg-white p-6 shadow-sm">
+export default function DashboardCards() {
+  const {
+    stats,
+    loading,
+    error,
+  } = useDashboard();
 
-      <div className="flex items-center justify-between">
-
-        <div>
-
-          <div className="text-sm text-slate-500">
-            {title}
-          </div>
-
-          <div className="mt-2 text-3xl font-bold">
-            {value}
-          </div>
-
-        </div>
-
-        <div className="text-4xl">
-          {icon}
-        </div>
-
+  if (loading) {
+    return (
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+        <p>Loading...</p>
       </div>
+    );
+  }
 
-    </div>
-  );
-}
+  if (error || !stats) {
+    return (
+      <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-red-600">
+        Failed to load dashboard statistics.
+      </div>
+    );
+  }
 
-export default function DashboardCards({
-  stats,
-}: Props) {
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-5">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
 
-      <DashboardCard
+      <StatCard
         title="Teachers"
-        value={stats.teachers}
-        icon="👨‍🏫"
+        value={stats.teachers.toString()}
+        icon={<GraduationCap size={24} />}
       />
 
-      <DashboardCard
+      <StatCard
         title="Students"
-        value={stats.students}
-        icon="👨‍🎓"
+        value={stats.students.toString()}
+        icon={<Users size={24} />}
       />
 
-      <DashboardCard
-        title="Subjects"
-        value={stats.subjects}
-        icon="📚"
-      />
-
-      <DashboardCard
+      <StatCard
         title="Assignments"
-        value={stats.assignments}
-        icon="📝"
+        value={stats.assignments.toString()}
+        icon={<BookOpen size={24} />}
       />
 
-      <DashboardCard
+      <StatCard
         title="Submissions"
-        value={stats.submissions}
-        icon="📄"
+        value={stats.submissions.toString()}
+        icon={<FileText size={24} />}
       />
 
     </div>

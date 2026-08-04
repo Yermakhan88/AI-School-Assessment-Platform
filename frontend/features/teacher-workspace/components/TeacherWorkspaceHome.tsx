@@ -1,8 +1,13 @@
 "use client";
 
-import { BookOpen, ClipboardCheck } from "lucide-react";
+import DashboardCards from "@/features/dashboard/components/DashboardCards";
 
 import WorkspaceCard from "./WorkspaceCard";
+
+import {
+  BookOpen,
+  ClipboardCheck,
+} from "lucide-react";
 
 export default function TeacherWorkspaceHome() {
   return (
@@ -10,30 +15,32 @@ export default function TeacherWorkspaceHome() {
 
       <div className="mb-10">
 
-        <h1 className="text-4xl font-bold text-slate-900">
+        <h1 className="text-4xl font-bold">
           Good Morning 👋
         </h1>
 
-        <p className="mt-2 text-lg text-slate-500">
+        <p className="mt-2 text-slate-500">
           What would you like to do today?
         </p>
 
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <DashboardCards />
+
+      <div className="mt-10 grid gap-8 lg:grid-cols-2">
 
         <WorkspaceCard
           title="Assignment Management"
           description="Create, edit and publish learning activities."
-          value="7 Active"
+          value="Open →"
           href="/dashboard/teacher/assignments"
           icon={<BookOpen size={28} />}
         />
 
         <WorkspaceCard
-          title="Assignment Review"
+          title="Submission Review"
           description="Review submitted student work."
-          value="12 Waiting"
+          value="Open →"
           href="/dashboard/teacher/review"
           icon={<ClipboardCheck size={28} />}
         />

@@ -48,3 +48,13 @@ class UserService:
             return None
 
         return user
+
+    @staticmethod
+    def get_current_user(
+        db: Session,
+        user_id: int,
+    ):
+        return UserRepository.get_by_id(
+            db,
+            user_id,
+        )

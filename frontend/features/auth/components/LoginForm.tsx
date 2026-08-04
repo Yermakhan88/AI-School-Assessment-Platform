@@ -1,80 +1,113 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import { useAuth } from "../hooks/useAuth";
+import { useCurrentUser } from "@/shared/providers/AuthProvider";
 
 export default function LoginForm() {
-  const { signIn, loading } = useAuth();
+  const router = useRouter();
+
+  const { login, loading } = useAuth();
+
+  const { refresh } = useCurrentUser();
 
   const [email, setEmail] = useState("");
 
-  const [password, setPassword] = useState("");
+  const [password, setPassword] =
+    useState("");
+
+  const [error, setError] =
+    useState("");
 
   async function handleSubmit(
-    e: React.FormEvent,
+    e: FormEvent
   ) {
     e.preventDefault();
 
-    await signIn({
-      email,
-      password,
-    });
+    console.log("LOGIN SUBMIT");
+
+    setError("");
+
+    try {
+      await login(
+        email,
+        password
+      );
+
+      await refresh();
+
+      router.push(
+        "/dashboard/teacher"
+      );
+
+    } catch {
+
+      setError(
+        "Invalid email or password"
+      );
+
+    }
+
   }
 
   return (
+
     <form
       onSubmit={handleSubmit}
       className="space-y-5"
     >
-      <div>
 
-        <label className="mb-2 block text-sm font-medium">
-          Email
-        </label>
+      <Input
+        type="email"
+        placeholder="Email"
+        value={email}
+        onChange={(e) =>
+          setEmail(
+            e.target.value
+          )
+        }
+      />
 
-        <input
-          type="email"
-          required
-          value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
-          className="w-full rounded-lg border p-3 outline-none focus:border-blue-500"
-          placeholder="teacher@example.com"
-        />
+      <Input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={(e) =>
+          setPassword(
+            e.target.value
+          )
+        }
+      />
 
-      </div>
+      {error && (
 
-      <div>
+        <p className="text-sm text-red-600">
 
-        <label className="mb-2 block text-sm font-medium">
-          Password
-        </label>
+          {error}
 
-        <input
-          type="password"
-          required
-          value={password}
-          onChange={(e) =>
-            setPassword(e.target.value)
-          }
-          className="w-full rounded-lg border p-3 outline-none focus:border-blue-500"
-          placeholder="********"
-        />
+        </p>
 
-      </div>
+      )}
 
-      <button
+      <Button
         type="submit"
+        className="w-full"
         disabled={loading}
-        className="w-full rounded-lg bg-blue-600 px-4 py-3 font-medium text-white transition hover:bg-blue-700 disabled:opacity-50"
       >
+
         {loading
-          ? "Signing in..."
+          ? "Signing In..."
           : "Sign In"}
-      </button>
+
+      </Button>
 
     </form>
+
   );
+
 }

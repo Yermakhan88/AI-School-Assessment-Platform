@@ -8,6 +8,17 @@ from app.schemas.user import UserCreate
 class UserRepository:
 
     @staticmethod
+    def get_by_id(
+        db: Session,
+        user_id: int,
+    ):
+        return (
+            db.query(User)
+            .filter(User.id == user_id)
+            .first()
+        )
+
+    @staticmethod
     def get_by_email(
         db: Session,
         email: str,
@@ -26,7 +37,9 @@ class UserRepository:
         db_user = User(
             full_name=user.full_name,
             email=user.email,
-            password_hash=hash_password(user.password),
+            password_hash=hash_password(
+                user.password
+            ),
             role=user.role,
             is_active=user.is_active,
         )

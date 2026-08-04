@@ -1,61 +1,29 @@
-"use client";
+<WorkspaceSection
+    title="Programming Settings"
+>
 
-import { Card } from "@/components/ui/card";
+<div className="grid grid-cols-2 gap-4">
 
-export default function ProgrammingSettingsCard() {
-  return (
-    <Card className="rounded-2xl p-6">
+<InfoCard
+title="Programming Language"
+value="Python"
+/>
 
-      <h2 className="mb-6 text-xl font-semibold">
-        Programming Settings
-      </h2>
+<InfoCard
+title="Maximum Score"
+value="100"
+/>
 
-      <div className="grid grid-cols-2 gap-4">
+<InfoCard
+title="Group"
+value="ИНФ-201"
+/>
 
-        <InfoCard
-          title="Language"
-          value="Python"
-        />
+<InfoCard
+title="Deadline"
+value="10 Sep"
+/>
 
-        <InfoCard
-          title="Difficulty"
-          value="Medium"
-        />
+</div>
 
-        <InfoCard
-          title="Maximum Score"
-          value="100"
-        />
-
-        <InfoCard
-          title="Deadline"
-          value="10 Sep 2026"
-        />
-
-      </div>
-
-    </Card>
-  );
-}
-
-function InfoCard({
-  title,
-  value,
-}: {
-  title: string;
-  value: string;
-}) {
-  return (
-    <div className="rounded-xl border bg-slate-50 p-4">
-
-      <p className="text-sm text-slate-500">
-        {title}
-      </p>
-
-      <p className="mt-2 font-semibold">
-        {value}
-      </p>
-
-    </div>
-  );
-}
+</WorkspaceSection>

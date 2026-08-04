@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.database.database import get_db
+from app.schemas.dashboard import DashboardStats
 from app.services.dashboard_service import DashboardService
 
 router = APIRouter(
@@ -10,7 +11,10 @@ router = APIRouter(
 )
 
 
-@router.get("/stats")
+@router.get(
+    "/stats",
+    response_model=DashboardStats,
+)
 def get_dashboard_stats(
     db: Session = Depends(get_db),
 ):

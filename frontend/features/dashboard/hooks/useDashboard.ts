@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
 
-import { getDashboardStats } from "../api/dashboardApi";
-import { DashboardStats } from "../types";
+import { DashboardService } from "../services/dashboard.service";
+
+import { DashboardStats } from "../types/dashboard.types";
 
 export function useDashboard() {
   const [stats, setStats] =
@@ -13,34 +13,39 @@ export function useDashboard() {
   const [loading, setLoading] =
     useState(true);
 
-  async function loadStats() {
+  const [error, setError] =
+    useState("");
+
+  async function loadDashboard() {
     try {
       setLoading(true);
 
       const data =
-        await getDashboardStats();
+        await DashboardService.getStats();
 
       setStats(data);
 
-    } catch (error) {
-      console.error(error);
+    } catch {
 
-      toast.error(
-        "Failed to load dashboard statistics.",
+      setError(
+        "Failed to load dashboard."
       );
 
     } finally {
+
       setLoading(false);
+
     }
   }
 
   useEffect(() => {
-    loadStats();
+    loadDashboard();
   }, []);
 
   return {
     stats,
     loading,
-    refreshDashboard: loadStats,
+    error,
+    refresh: loadDashboard,
   };
 }

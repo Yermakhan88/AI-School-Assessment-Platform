@@ -101,3 +101,33 @@ Assignment Canvas
 Status
 
 Ready to Start
+
+Sprint
+
+2
+
+Current Module
+
+Assignment Canvas
+
+Status
+
+Ready
+
+Day 2
+
+Status
+
+🟢 SUCCESS
+
+MVP
+
+Completed
+
+Next
+
+Assignment Review
+
+Mood
+
+🚀🚀🚀

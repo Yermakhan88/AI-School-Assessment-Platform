@@ -5,55 +5,74 @@ import AssignmentCanvas from "./AssignmentCanvas";
 import AssignmentLibrary from "./AssignmentLibrary";
 import AssignmentToolbar from "./AssignmentToolbar";
 
-import { useAssignmentWorkspace } from "../hooks/useAssignmentWorkspace";
+import { useAssignments } from "../hooks/useAssignments";
 
 export default function AssignmentWorkspace() {
   const {
     assignments,
     selectedAssignment,
-    selectedAssignmentId,
-    setSelectedAssignmentId,
-  } = useAssignmentWorkspace();
+    setSelectedAssignment,
+    loading,
+    error,
+  } = useAssignments();
+
+  if (loading) {
+    return (
+      <div className="flex h-[calc(100vh-170px)] items-center justify-center">
+        <p className="text-slate-500 text-lg">
+          Loading assignments...
+        </p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex h-[calc(100vh-170px)] items-center justify-center">
+        <p className="text-red-600">
+          {error}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-[calc(100vh-170px)] flex-col gap-6">
 
-      {/* Toolbar */}
-
       <AssignmentToolbar />
 
-      {/* Workspace */}
-
       <div className="flex flex-1 gap-6 overflow-hidden">
-
-        {/* Library */}
 
         <aside className="w-80 flex-shrink-0 rounded-2xl border bg-white shadow-sm">
 
           <AssignmentLibrary
             assignments={assignments}
-            selectedId={selectedAssignmentId}
-            onSelect={setSelectedAssignmentId}
+            selectedId={selectedAssignment?.id ?? 0}
+            onSelect={(id) => {
+              const assignment = assignments.find(
+                (item) => item.id === id
+              );
+
+              if (assignment) {
+                setSelectedAssignment(assignment);
+              }
+            }}
           />
 
         </aside>
 
-        {/* Canvas */}
-
-        <main className="flex-1 min-w-0 overflow-auto rounded-2xl border bg-slate-50 shadow-sm">
+        <main className="flex-1 overflow-auto rounded-2xl border bg-slate-50 shadow-sm">
 
           <AssignmentCanvas
-            assignment={selectedAssignment}
+            assignment={selectedAssignment ?? undefined}
           />
 
         </main>
 
-        {/* AI */}
-
         <aside className="w-72 flex-shrink-0 rounded-2xl border bg-white shadow-sm">
 
           <AssignmentAssistant
-            assignment={selectedAssignment}
+            assignment={selectedAssignment ?? undefined}
           />
 
         </aside>

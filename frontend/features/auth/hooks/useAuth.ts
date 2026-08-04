@@ -1,77 +1,45 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 
-import { login } from "../api/authApi";
-import { LoginRequest } from "../types";
+import { AuthService } from "../services/auth.service";
+
+import { saveToken } from "@/lib/api/token";
 
 export function useAuth() {
-  const router = useRouter();
-
   const [loading, setLoading] = useState(false);
 
-  async function signIn(
-    credentials: LoginRequest,
+  async function login(
+    email: string,
+    password: string
   ) {
     try {
       setLoading(true);
 
-      const response = await login(
-        credentials,
-      );
+      const response =
+        await AuthService.login({
+          email,
+          password,
+        });
 
-      localStorage.setItem(
-        "access_token",
-        response.access_token,
-      );
+      saveToken(response.access_token);
 
-      toast.success(
-        "Login successful.",
-      );
-
-      router.push(
-        "/dashboard",
-      );
-
-    } catch (error) {
-      console.error(error);
-
-      toast.error(
-        "Invalid email or password.",
-      );
+      return response;
 
     } finally {
+
       setLoading(false);
+
     }
   }
 
-  function logout() {
-    localStorage.removeItem(
-      "access_token",
-    );
-
-    router.push("/");
-  }
-
-  function getToken() {
-    if (typeof window === "undefined") {
-      return null;
-    }
-
-    return localStorage.getItem(
-      "access_token",
-    );
+  async function currentUser() {
+    return await AuthService.currentUser();
   }
 
   return {
+    login,
+    currentUser,
     loading,
-
-    signIn,
-
-    logout,
-
-    getToken,
   };
 }

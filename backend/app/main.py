@@ -11,6 +11,10 @@ from app.api.ai_review_router import router as ai_review_router
 from app.api.dashboard_router import router as dashboard_router
 from app.api.report_router import router as report_router
 from app.api.settings_router import router as settings_router
+from app.api.material_router import router as material_router
+from app.api.student_dashboard_router import (
+    router as student_dashboard_router,
+)
 
 from app.database.database import Base, engine
 
@@ -63,6 +67,10 @@ app.include_router(ai_review_router)
 app.include_router(dashboard_router)
 app.include_router(report_router)
 app.include_router(settings_router)
+app.include_router(material_router)
+app.include_router(
+    student_dashboard_router
+)
 
 # ==========================
 # Endpoints

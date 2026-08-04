@@ -1,28 +1,29 @@
-import { LoginRequest } from "../types";
+import http from "@/lib/api/interceptors";
+import { ENDPOINTS } from "@/lib/api/endpoints";
 
-const API_URL = "http://127.0.0.1:8000/api/auth";
+import {
+  LoginRequest,
+  LoginResponse,
+  CurrentUser,
+} from "../types/auth.types";
 
-export async function login(
-  credentials: LoginRequest,
-) {
-  const response = await fetch(
-    `${API_URL}/login`,
-    {
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json",
-      },
-
-      body: JSON.stringify(credentials),
-    },
-  );
-
-  if (!response.ok) {
-    throw new Error(
-      "Invalid email or password."
+export const AuthApi = {
+  async login(
+    payload: LoginRequest
+  ): Promise<LoginResponse> {
+    const { data } = await http.post<LoginResponse>(
+      ENDPOINTS.AUTH.LOGIN,
+      payload
     );
-  }
 
-  return response.json();
-}
+    return data;
+  },
+
+  async me(): Promise<CurrentUser> {
+    const { data } = await http.get<CurrentUser>(
+      ENDPOINTS.AUTH.ME
+    );
+
+    return data;
+  },
+};

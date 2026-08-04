@@ -15,7 +15,7 @@ import {
 const menu = [
   {
     title: "Home",
-    href: "/dashboard/teacher/workspace",
+    href: "/dashboard/teacher",
     icon: Home,
   },
   {
@@ -24,7 +24,7 @@ const menu = [
     icon: BookOpen,
   },
   {
-    title: "Assignment Review",
+    title: "Submission Review",
     href: "/dashboard/teacher/review",
     icon: ClipboardCheck,
   },

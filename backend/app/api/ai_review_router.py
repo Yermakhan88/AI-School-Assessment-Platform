@@ -8,7 +8,7 @@ from app.schemas.ai_review import AIReviewResponse
 from app.services.ai_review_service import AIReviewService
 
 router = APIRouter(
-    prefix="/ai-review",
+    prefix="/api/ai-review",
     tags=["AI Review"],
 )
 

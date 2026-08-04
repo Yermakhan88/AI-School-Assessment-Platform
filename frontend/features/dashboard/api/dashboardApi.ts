@@ -1,17 +1,16 @@
-import { DashboardStats } from "../types";
+import http from "@/lib/api/interceptors";
 
-const API_URL = "http://127.0.0.1:8000/api/dashboard";
+import { ENDPOINTS } from "@/lib/api/endpoints";
 
-export async function getDashboardStats(): Promise<DashboardStats> {
-  const response = await fetch(
-    `${API_URL}/stats`
-  );
+import { DashboardStats } from "../types/dashboard.types";
 
-  if (!response.ok) {
-    throw new Error(
-      "Failed to load dashboard statistics."
-    );
-  }
+export const DashboardApi = {
+  async getStats(): Promise<DashboardStats> {
+    const { data } =
+      await http.get<DashboardStats>(
+        ENDPOINTS.DASHBOARD.STATS
+      );
 
-  return response.json();
-}
+    return data;
+  },
+};
