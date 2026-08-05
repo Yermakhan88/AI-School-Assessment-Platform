@@ -8,7 +8,7 @@ from app.repositories.material_repository import (
 )
 
 from app.services.material_parser import MaterialParser
-from app.services.topic_detector import TopicDetector
+from app.services.assignment_generator import AssignmentGenerator
 
 
 class MaterialService:
@@ -64,7 +64,7 @@ class MaterialService:
         # AI Analysis
         #
 
-        result = TopicDetector.detect(text)
+        result = AssignmentGenerator.generate(text)
 
         objectives = json.dumps(
             result["learning_objectives"],
@@ -77,8 +77,17 @@ class MaterialService:
             topic=result["topic"],
             learning_objectives=objectives,
             bloom_level=result["bloom_level"],
-            generated_assignment="",
-            generated_rubric="",
+
+            generated_assignment=json.dumps(
+                result.get("assignment", {}),
+                ensure_ascii=False,
+            ),
+
+            generated_rubric=json.dumps(
+                result.get("rubric", []),
+                ensure_ascii=False,
+            ),
+            
         )
 
         return MaterialRepository.get_by_id(
